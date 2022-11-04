@@ -5,13 +5,54 @@ let key = "";
 function onDeviceReady() {
     screen.orientation.lock('portrait');
     console.log('Running platformId-' + cordova.platformId + '@' + cordova.version);
-    $('.node').html("Device Ready"); 
-    console.log('file',cordova.file);
+    $('.node').html("Device Ready");
+    console.log('file', cordova.file);
     $("#token").html(token);
     console.log(device.cordova);
+    window['cordova'].plugins.UsbPrinter.getConnectedPrinters((result) => {
+        console.log(result);
+      
+        // result will be list of printers connected to the usb device
+        // success callback execution
+        var output = '';
+        for (var property in result) {
+            output += property + ': ' + result[property] + '; ';
+        }
+        $("#logsPrinter").html("Print getConnectedPrinters " +output);
+    }, err => {
+        console.error("print no found ", err);
+        $("#logsPrinter").html("print no found " + err);
+    });
+
 }
 
 $(document).ready(function () {
+
+    $("#fnPrinting").click(function(){
+        //1273_1002
+        let message = "printng dengan android cordova \n ok masuk 11234567890qwertyuiopasdfghjklzxcvbnm";
+
+        window['cordova'].plugins.UsbPrinter.connect("1273_1002", (result) => {
+            console.log("  // success callback execution")
+            $("#logsPrinter").html("success callback execution");
+            window['cordova'].plugins.UsbPrinter.print("1273_1002", message, (result) => {
+                console.log("result of usb print action", result);
+                alert("result of usb print action");
+                // successful callback execution
+            }, err => {
+                console.error('Error in usb print action', err)
+                alert('Error in usb print action');
+                // failure callback execution
+            });
+        }, err => { 
+            console.error("  // failure callback execution")
+            alert(' failure callback execution');
+        });
+
+
+        
+    })
+
     $(".reload").click(function () {
         $('.reloadRespont').html(" done!");
         console.log('cordova ', device.cordova);
@@ -20,7 +61,7 @@ $(document).ready(function () {
         console.log('uuid ', device.uuid);
         console.log('manufacturer ', device.manufacturer);
         console.log('isVirtual ', device.isVirtual);
-        console.log('serial ', device.serial); 
+        console.log('serial ', device.serial);
         $("#token").html("Plz check console.log");
         let data = ` cordova : ${device.cordova} <br>  
         model : ${device.model} <br> 
@@ -35,16 +76,16 @@ $(document).ready(function () {
 
     $('#submit').click(function () {
         uniqueId = $.md5(reverseString(device.serial));
-        let token = device.serial+"@"+uniqueId
-        if (device.platform == "Android") {   
-            console.log("Divice serial : ",device.serial);
-            console.log("token : ",token); 
+        let token = device.serial + "@" + uniqueId
+        if (device.platform == "Android") {
+            console.log("Divice serial : ", device.serial);
+            console.log("token : ", token);
             $('.returnData').val(token);
-      
+
         } else {
-            $('.node').html("Not support for "+device.platform);
-            alert("Not support for "+device.platform);
-        } 
+            $('.node').html("Not support for " + device.platform);
+            alert("Not support for " + device.platform);
+        }
     });
 
     $("#onCam").click(function () {
@@ -53,12 +94,12 @@ $(document).ready(function () {
         });
     });
 
-    
+
 });
 
- 
 
-  
+
+
 function cameraSuccess(imageURI) {
     console.log("Camera cameraSuccess.", imageURI);
     upload(imageURI);
