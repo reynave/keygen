@@ -30,11 +30,15 @@
       "cordova-plugin-file": {
         "ANDROIDX_WEBKIT_VERSION": "1.4.0"
       },
-      "cordova-plugin-screen-orientation": {}
+      "cordova-plugin-screen-orientation": {},
+      "cordova-plugin-usbprint": {}
     },
     "platforms": [
       "android",
       "browser"
     ]
+  },
+  "dependencies": {
+    "cordova-plugin-usbprint": "0.0.4"
   }
 }

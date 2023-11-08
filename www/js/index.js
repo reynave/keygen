@@ -30,15 +30,22 @@ $(document).ready(function () {
 
     $("#fnPrinting").click(function(){
         //1273_1002
-        let message = "printng dengan android cordova \n ok masuk 11234567890qwertyuiopasdfghjklzxcvbnm";
-
-        window['cordova'].plugins.UsbPrinter.connect("1273_1002", (result) => {
+        let message = "\n\n\n\ printng dengan android cordova \n ok masuk 11234567890qwertyuiopasdfghjklzxcvbnm \n\n\n";
+        let wintec7 = "1155_2007";
+        let wintec9 = "1155_2009";
+        let wintec10 = "1155_2010";
+        let numberWintec = $('#inputNumberPrinter').val();
+        
+        window['cordova'].plugins.UsbPrinter.connect(numberWintec, (result) => {
             console.log("  // success callback execution")
             $("#logsPrinter").html("success callback execution");
-            window['cordova'].plugins.UsbPrinter.print("1273_1002", message, (result) => {
+            window['cordova'].plugins.UsbPrinter.print(numberWintec, message, (result) => {
                 console.log("result of usb print action", result);
-                alert("result of usb print action");
-                // successful callback execution
+                // alert("result of usb print action");
+                // successful callback execution 
+
+                window['cordova'].plugins.UsbPrinter.cutPaper(numberWintec);
+
             }, err => {
                 console.error('Error in usb print action', err)
                 alert('Error in usb print action');
@@ -49,7 +56,20 @@ $(document).ready(function () {
             alert(' failure callback execution');
         });
 
-
+        // window['cordova'].plugins.UsbPrinter.getConnectedPrinters((result) => {
+        //     console.log(result);
+          
+        //     // result will be list of printers connected to the usb device
+        //     // success callback execution
+        //     var output = '';
+        //     for (var property in result) {
+        //         output += property + ': ' + result[property] + '; ';
+        //     }
+        //     $("#logsPrinter").html("Print getConnectedPrinters " +output);
+        // }, err => {
+        //     console.error("print no found ", err);
+        //     $("#logsPrinter").html("print no found " + err);
+        // });
         
     })
 
@@ -94,7 +114,12 @@ $(document).ready(function () {
         });
     });
 
-
+    $("#testinet").click(function () {
+        $.get("http://128.199.94.89/cso1/public/", function(data, status){
+            console.log( data, status);
+            $(".note1").html(JSON.stringify(data));
+          });
+    });
 });
 
 
